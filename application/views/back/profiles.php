@@ -1,7 +1,7 @@
 <?php
 // If accessed directly, Amen.
-defined( 'BASEPATH' ) or exit( 'God bless you!' );
-?>
+defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
+
 <!-- Left side column. contains the logo and sidebar -->
 	<aside class="main-sidebar">
 		<!-- sidebar: style can be found in sidebar.less -->
@@ -12,25 +12,17 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' );
 					<img src="<?= base_url( 'assets/dist/img/user2-160x160.jpg'); ?>" class="img-circle" alt="User Image">
 				</div>
 				<div class="pull-left info">
-					<p>Camp Admin</p>
+					<p><?php echo $this->session->userdata( 'username' ) ? 'User' : ucwords( $this->session->userdata( 'username' ) ); ?></p>
 					<a href="<?= base_url( 'logout' ); ?>"><i class="fa fa-circle text-success"></i> Logout</a>
 				</div>
 			</div>
 			<!-- /.search form -->
 			<!-- sidebar menu: : style can be found in sidebar.less -->
 			<ul class="sidebar-menu" data-widget="tree">
-				<li class="header">Data Reporting</li>
-				<li class="treeview">
-					<a href="#">
-						<i class="fa fa-dashboard"></i> <span>Dashboard</span>
-						<span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-					</a>
-				</li>
+				<li class="header">Profiles</li>
 				<li class="treeview active">
-					<a href="<?= base_url( 'admin/report' ); ?>">
-						<i class="fa fa-table"></i> <span>Attendee Report</span>
+					<a href="<?= base_url( 'dashboard/profiles' ); ?>">
+						<i class="fa fa-table"></i> <span>Profile List</span>
 						<span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -46,12 +38,12 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' );
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<h1>
-				Data Reporting
-				<small>attendee list</small>
+				Profile List
+				<small>gamos search</small>
 			</h1>
 			<ol class="breadcrumb">
-				<li><a href="#"><i class="fa fa-dashboard"></i> Admin</a></li>
-				<li class="active">Data reporting</li>
+				<li><a href="<?= base_url( 'dashboard/profiles' ); ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+				<li class="active">Profile List</li>
 			</ol>
 		</section>
 
@@ -72,23 +64,16 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' );
 					<?php endif; ?>
 					<div class="box">
 						<div class="box-header">
-							<h3 class="box-title">Attendees Filter</h3>
+							<h3 class="box-title">Profile Filter</h3>
 						</div>
 						<!-- /.box-header -->
-                        <form id="filter_form" action="<?= base_url( 'admin/export' ) ?>" method="post">
+                        <form id="filter_form">
                             <div class="box-body">
                                 <div class="col-md-9">
-                                    <div class="col-xs-4">
-                                        <div class="form-group has-feedback">
-                                            <label>Name</label>
-                                            <input name="name" id="name" class="form-control attendee-filter" placeholder="Full name">
-                                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-3">
                                         <div class="form-group has-feedback">
                                             <label>Church</label>
-                                            <select class="form-control attendee-filter select2" id="church" name="church">
+                                            <select class="form-control profile-filter select2" id="church" name="church">
                                                 <option value="">Select church</option>
                                                 <?php if ( ! empty( $churches ) ) : ?>
                                                     <?php foreach ( $churches as $church ) : ?>
@@ -98,92 +83,102 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' );
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group has-feedback">
-                                            <label>Gender</label>
-                                            <select class="form-control attendee-filter select2" id="gender" name="gender">
-                                                <option value="">Select gender</option>
-                                                <option value="M">Male</option>
-                                                <option value="F">Female</option>
-                                            </select>
-                                        </div>
-                                    </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>Gender</label>
+			                                <select class="form-control profile-filter select2" id="gender" name="gender">
+				                                <option value="">Select gender</option>
+				                                <option value="M">Male</option>
+				                                <option value="F">Female</option>
+			                                </select>
+		                                </div>
+	                                </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>Age from</label>
+			                                <select class="form-control profile-filter select2" id="age_from" name="age_from">
+				                                <option value="">Select age</option>
+				                                <?php for ( $i = 1; $i <= 50; $i++ ) : ?>
+					                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+				                                <?php endfor; ?>
+			                                </select>
+		                                </div>
+	                                </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>Age to</label>
+			                                <select class="form-control profile-filter select2" id="age_to" name="age_to">
+				                                <option value="">Select age</option>
+				                                <?php for ( $i = 1; $i <= 50; $i++ ) : ?>
+					                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+				                                <?php endfor; ?>
+			                                </select>
+		                                </div>
+	                                </div>
                                     <div class="clearfix"></div>
-                                    <div class="col-xs-4">
-                                        <div class="form-group has-feedback">
-                                            <div class="col-xs-6 no-padding-left">
-                                                <label>Age from</label>
-                                                <select class="form-control attendee-filter select2" id="age_from" name="age_from">
-                                                    <option value="">Select age</option>
-                                                    <?php for ( $i = 1; $i <= 120; $i++ ) : ?>
-                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                                    <?php endfor; ?>
-                                                </select>
-                                            </div>
-                                            <div class="col-xs-6 no-padding-right">
-                                                <label>Age to</label>
-                                                <select class="form-control attendee-filter select2" id="age_to" name="age_to">
-                                                    <option value="">Select age</option>
-                                                    <?php for ( $i = 1; $i <= 120; $i++ ) : ?>
-                                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                                    <?php endfor; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="col-xs-6 no-padding-left">
-                                            <div class="form-group has-feedback">
-                                                <label>Day</label>
-                                                <select class="form-control attendee-filter select2" id="day" name="day">
-                                                    <option value="">Select day</option>
-                                                    <option value="1">Day 1</option>
-                                                    <option value="2">Day 2</option>
-                                                    <option value="3">Day 3</option>
-                                                    <option value="4">Day 4</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6 no-padding-right">
-                                            <div class="form-group has-feedback">
-                                                <label>Time</label>
-                                                <select class="form-control attendee-filter select2" id="time" name="time">
-                                                    <option value="">Select time</option>
-                                                    <option value="breakfast">Breakfast</option>
-                                                    <option value="lunch">Lunch</option>
-                                                    <option value="tea">Tea</option>
-                                                    <option value="supper">Supper</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <div class="form-group has-feedback">
-                                            <label>Accommodation</label>
-                                            <select class="form-control attendee-filter select2" id="accommodation" name="accommodation">
-                                                <option value="">Select</option>
-                                                <option value="1">Yes</option>
-                                                <option value="0">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <div class="form-group has-feedback">
-                                            <label></label>
-                                            <button type="button" class="btn btn-block btn-primary" id="export">Export</button>
-                                        </div>
-                                    </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>State</label>
+			                                <select class="form-control profile-filter select2" id="state" name="state">
+				                                <option value="">Select state</option>
+				                                <?php if ( ! empty( $states ) ) : ?>
+					                                <?php foreach ( $states as $state ) : ?>
+						                                <option value="<?= $state->id ?>"><?= $state->name ?></option>
+					                                <?php endforeach; ?>
+				                                <?php endif; ?>
+			                                </select>
+		                                </div>
+	                                </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>District</label>
+			                                <select class="form-control profile-filter select2" id="district" name="district">
+				                                <option value="">Select district</option>
+				                                <?php if ( ! empty( $districts ) ) : ?>
+					                                <?php foreach ( $districts as $district ) : ?>
+						                                <option value="<?= $district->id ?>"><?= $district->name ?></option>
+					                                <?php endforeach; ?>
+				                                <?php endif; ?>
+			                                </select>
+		                                </div>
+	                                </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>Education</label>
+			                                <select class="form-control profile-filter select2" id="education" name="education">
+				                                <option value="">Select education</option>
+				                                <?php if ( ! empty( $educations ) ) : ?>
+					                                <?php foreach ( $educations as $education ) : ?>
+						                                <option value="<?= $education->id ?>"><?= $education->name ?></option>
+					                                <?php endforeach; ?>
+				                                <?php endif; ?>
+			                                </select>
+		                                </div>
+	                                </div>
+	                                <div class="col-xs-3">
+		                                <div class="form-group has-feedback">
+			                                <label>Job</label>
+			                                <select class="form-control profile-filter select2" id="job" name="job">
+				                                <option value="">Select job</option>
+				                                <?php if ( ! empty( $jobs ) ) : ?>
+					                                <?php foreach ( $jobs as $job ) : ?>
+						                                <option value="<?= $job->id ?>"><?= $job->name ?></option>
+					                                <?php endforeach; ?>
+				                                <?php endif; ?>
+			                                </select>
+		                                </div>
+	                                </div>
                                 </div>
                                 <div class="col-md-3 text-center">
                                     <div class="small-box bg-green">
                                         <div class="inner">
                                             <h3>
-                                                <span id="attendees_counts">Profiles</span>
+                                                <span id="profile_counts">Profiles</span>
                                             </h3>
                                         </div>
                                         <a href="#" class="small-box-footer">
                                             <h3>
-                                                <span id="attendees_count">0</span>
+                                                <span id="profile_count">0</span>
                                             </h3>
                                         </a>
                                     </div>
@@ -196,15 +191,16 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' );
 						<div class="box-header"></div>
 						<!-- /.box-header -->
 						<div class="box-body">
-							<table id="attendees_table" class="table table-bordered table-striped">
+							<table id="profiles_table" class="table table-bordered table-striped">
 								<thead>
 									<tr>
-										<th>#</th>
+										<th>Image</th>
 										<th>Name</th>
-										<th>Church</th>
-										<th>Age</th>
 										<th>Gender</th>
-										<th>Accommodation</th>
+										<th>Age</th>
+										<th>Church</th>
+										<th>Education</th>
+										<th>Job</th>
                                         <th>Actions</th>
 									</tr>
 								</thead>

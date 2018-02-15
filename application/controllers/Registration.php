@@ -21,10 +21,6 @@ class Registration extends CI_Controller {
 
 		$this->load->library( array( 'session' ) );
 		$this->load->helper( array( 'url', 'user' ) );
-		$this->load->model( 'front/registration_model' );
-
-		// Force login.
-		force_login();
 	}
 
 	/**
@@ -41,53 +37,19 @@ class Registration extends CI_Controller {
 
 		// Load form helper.
 		$this->load->helper( 'form' );
+		$this->load->model( 'common/data_model' );
 
-		// Get churches list.
-		$data['churches'] = $this->registration_model->get_churches();
-		$data['dates'] = $this->get_active_dates();
+		// Get states, churches, educations and jobs list.
+		$data['states'] = $this->data_model->get_states();
+		$data['districts'] = $this->data_model->get_districts();
+		$data['churches'] = $this->data_model->get_churches();
+		$data['educations'] = $this->data_model->get_educations();
+		$data['jobs'] = $this->data_model->get_jobs();
 
 		// Render html.
 		$this->load->view( 'front/common/header' );
 		$this->load->view( 'front/register', $data );
 		$this->load->view( 'front/common/footer' );
-	}
-
-	/**
-	 * Get classess to disable dates.
-	 *
-	 * NOTE: This needs to be changed according to camp
-	 * dates change.
-	 *
-	 * @access private
-	 *
-	 * @return array
-	 */
-	private function get_active_dates() {
-
-		$days_class = array();
-
-		// Today time.
-		$today = strtotime( 'today' );;
-
-		// Current camp dates.
-		$days = array(
-			1 => '24-12-2017',
-			2 => '25-12-2017',
-			3 => '26-12-2017',
-			4 => '27-12-2017',
-		);
-
-		// Loop through each days.
-		foreach ( $days as $key => $day ) {
-			// If current date is greater than the date.
-			if( strtotime( $day ) < $today ) {
-				$days_class[ $key ] = 'disabled';
-			} else {
-				$days_class[ $key ] = '';
-			}
-		}
-
-		return $days_class;
 	}
 
 	/**
@@ -103,113 +65,27 @@ class Registration extends CI_Controller {
 	 */
 	public function register() {
 
+		//echo '<pre>'; print_r($_POST); exit;
 		// Validate form.
 		if ( $this->validate() ) {
 
 			if ( $this->is_duplicate() ) {
-				$this->session->set_flashdata( 'error', 'Oh nah! This attendee was already registered.' );
+				$this->session->set_flashdata( 'error', 'Oh nah! This profile was already registered.' );
 			} elseif ( $this->insert() ) {
 				// Attempt to insert registration data and return success.
 				$this->session->set_flashdata( 'success', 'Registration successful!' );
 			} else {
 				$this->session->set_flashdata( 'error', 'Oh nah! Registration failed.' );
 			}
+
+			redirect( 'registration' );
 		} else {
-			// Validation errors.
-			$this->session->set_flashdata( 'error', validation_errors() );
-		}
-
-		redirect( 'registration' );
-	}
-
-	/**
-	 * Insert dummy data to database for testing.
-	 *
-	 * @param int $count Dummy user count.
-	 *
-	 * @return void
-	 */
-	public function insert_dummy( $count = 100 ) {
-
-		$names = array( 'Sijo', 'Joel', 'Biju', 'Sabu', 'Shintu', 'Gaius', 'Abin', 'Prem', 'Vivek', 'Adyn', 'Stephen' );
-		$gender = array( 'M', 'F' );
-		for ( $i = 0; $i < $count; $i++ ) {
-			$data = array(
-				'church'        => rand( 1, 3 ),
-				'name'          => $names[ rand( 0, count( $names ) - 1 ) ],
-				'age'           => rand( 1, 120 ),
-				'gender'        => $gender[ rand( 0, 1 ) ],
-				'accommodation' => rand( 0, 1 ),
-				'all_days'      => rand( 0, 1 ),
-				'day'           => array(
-					1 => array(
-						'available' => rand( 0, 1 ),
-						'supper'    => rand( 0, 1 ),
-					),
-					2 => array(
-						'available' => rand( 0, 1 ),
-						'breakfast' => rand( 0, 1 ),
-						'lunch'     => rand( 0, 1 ),
-						'tea'       => rand( 0, 1 ),
-						'supper'    => rand( 0, 1 ),
-					),
-					3 => array(
-						'available' => rand( 0, 1 ),
-						'breakfast' => rand( 0, 1 ),
-						'lunch'     => rand( 0, 1 ),
-						'tea'       => rand( 0, 1 ),
-						'supper'    => rand( 0, 1 ),
-					),
-					4 => array(
-						'available' => rand( 0, 1 ),
-						'breakfast' => rand( 0, 1 ),
-						'lunch'     => rand( 0, 1 ),
-						'tea'       => rand( 0, 1 ),
-						'supper'    => rand( 0, 1 ),
-					),
-				),
-			);
-
-			$this->insert_dummy_data( $data );
+			$this->index();
 		}
 	}
 
 	/**
-	 * Format and insert dummy registration data.
-	 *
-	 * Send dummy registration data to registration model in
-	 * valid format.
-	 *
-	 * @access private
-	 *
-	 * @return mixed
-	 */
-	private function insert_dummy_data( $data ) {
-
-		// Registration data.
-		$insert_data = array(
-			'church' => $data['church'],
-			'name' => $data['name'],
-			'gender' => $data['gender'],
-			'age' => $data['age'],
-			'accommodation' => $data['accommodation'],
-			'hot_water' => 0,
-			'milk' => 0,
-			'inserted_by' => 1,
-		);
-
-		// Insert attendee personal data and get attendee id.
-		$attendee_id = $this->registration_model->register( $insert_data );
-		// If attendee added, insert date and time.
-		if ( $attendee_id ) {
-			$this->insert_dates_time( $attendee_id, $data['day'] );
-		}
-
-		return ( ! empty( $attendee_id ) );
-	}
-
-	/**
-	 * Format and insert registration data.
+	 * Format and insert profile data.
 	 *
 	 * Send registration data to registration model in
 	 * valid format.
@@ -220,80 +96,33 @@ class Registration extends CI_Controller {
 	 */
 	private function insert() {
 
-		$post = $this->input->post();
-
-		// Registration data.
+		// Profile data.
 		$data = array(
-			'church' => (int) $this->input->post( 'church' ),
 			'name' => trim( $this->input->post( 'name' ) ),
+			'church' => (int) $this->input->post( 'church' ),
 			'gender' => $this->input->post( 'gender' ) === 'F' ? 'F' : 'M',
-			'age' => (int) $this->input->post( 'age' ),
-			'accommodation' => $this->input->post( 'accommodation' ) ? 1 : 0,
-			'hot_water' => $this->input->post( 'hot_water' ) ? 1 : 0,
-			'milk' => $this->input->post( 'milk' ) ? 1 : 0,
-			'inserted_by' => $this->session->userdata( 'user_id' )? $this->session->userdata( 'user_id' ) : null,
+			'dob' => $this->input->post( 'dob' ),
+			'height' => (int) $this->input->post( 'height' ),
+			'weight' => (int) $this->input->post( 'weight' ),
+			'state' => (int) $this->input->post( 'state' ),
+			'district' => (int) $this->input->post( 'district' ),
+			'education' => $this->input->post( 'education' ),
+			'education_details' => trim( $this->input->post( 'education_details' ) ),
+			'job' => $this->input->post( 'job' ),
+			'job_details' => trim( $this->input->post( 'job_details' ) ),
+			'father_name' => $this->input->post( 'father_name' ),
+			'father_occupation' => trim( $this->input->post( 'father_occupation' ) ),
+			'father_number' => (int) $this->input->post( 'father_number' ),
+			'mother_name' => trim( $this->input->post( 'mother_name' ) ),
+			'elder_name' => trim( $this->input->post( 'elder_name' ) ),
+			'elder_number' => (int) $this->input->post( 'elder_number' ),
+			'upload_key' => (int) $this->input->post( 'upload_key' ),
 		);
 
 		// Insert attendee personal data and get attendee id.
 		$attendee_id = $this->registration_model->register( $data );
-		// If attendee added, insert date and time.
-		if ( $attendee_id ) {
-			$this->insert_dates_time( $attendee_id, $this->input->post( 'day' ) );
-		}
 
 		return ( ! empty( $attendee_id ) );
-	}
-
-	/**
-	 * Set date and time values.
-	 *
-	 * Get date and time data from form and format
-	 * it to match db field.
-	 *
-	 * @param int $attendee_id Attendee ID.
-	 * @param array $dates Dates field value.
-	 *
-	 * @access private
-	 *
-	 * @return mixed
-	 */
-	private function insert_dates_time( $attendee_id, $dates ) {
-
-		// Do not continue if date data is empty.
-		if ( empty( $dates ) || ! is_array( $dates ) ) {
-			return false;
-		}
-
-		$date['attendee_id'] = $attendee_id;
-		// Loop through each days.
-		for ( $i = 1; $i <= 4; $i++ ) {
-			// If the attendee is not available on this day.
-			$date[ 'day' . $i ] = isset( $dates[ $i ][ 'available' ] ) ? 1 : 0;
-		}
-
-		// Get date id after inserting date.
-		$date_id = $this->registration_model->insert_dates( $date );
-
-		// If dates added, insert timing too.
-		if ( $date_id ) {
-			$timing = array();
-			for ( $i = 1; $i <= 4; $i++ ) {
-				// No need enter timing if not available.
-				if ( empty( $dates[ $i ][ 'available' ] ) ) {
-					continue;
-				}
-				$timing[] = array(
-					'date_id' => $date_id,
-					'day' => $i,
-					'breakfast' => isset( $dates[ $i ][ 'breakfast' ] ) ? 1 : 0,
-					'lunch' => isset( $dates[ $i ][ 'lunch' ] ) ? 1 : 0,
-					'tea' => isset( $dates[ $i ][ 'tea' ] ) ? 1 : 0,
-					'supper' => isset( $dates[ $i ][ 'supper' ] ) ? 1 : 0,
-				);
-			}
-
-			$this->registration_model->insert_timings( $timing );
-		}
 	}
 
 	/**
@@ -312,32 +141,27 @@ class Registration extends CI_Controller {
 		$this->load->library( 'form_validation' );
 
 		// Set validation rules.
+		$this->form_validation->set_rules( 'name', 'name', 'trim|required' );
 		$this->form_validation->set_rules( 'church', 'church', 'trim|required|integer' );
-		$this->form_validation->set_rules( 'name', 'name', 'trim|required|callback_dates_required' );
-		$this->form_validation->set_rules( 'age', 'age', 'trim|required|integer|less_than[121]|greater_than[0]' );
 		$this->form_validation->set_rules( 'gender', 'gender', 'trim|required|max_length[1]' );
-		$this->form_validation->set_rules( 'day[]', 'day', 'callback_dates_required');
+		$this->form_validation->set_rules( 'dob', 'dob', 'trim|required' );
+		$this->form_validation->set_rules( 'height', 'height', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'weight', 'weight', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'state', 'state', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'district', 'district', 'trim|required' );
+		$this->form_validation->set_rules( 'education', 'education', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'education_details', 'education_details', 'trim|required' );
+		$this->form_validation->set_rules( 'job', 'job', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'job_details', 'job_details', 'trim|required' );
+		$this->form_validation->set_rules( 'father_name', 'father_name', 'trim|required' );
+		$this->form_validation->set_rules( 'father_occupation', 'father_occupation', 'trim|required' );
+		$this->form_validation->set_rules( 'father_number', 'father_number', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'mother_name', 'mother_name', 'trim|required' );
+		$this->form_validation->set_rules( 'elder_name', 'elder_name', 'trim|required' );
+		$this->form_validation->set_rules( 'elder_number', 'elder_number', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'upload_key', 'upload_key', 'trim|required|integer' );
 
 		return $this->form_validation->run();
-	}
-
-	/**
-	 * Custom callback for dates validation.
-	 *
-	 * Set custom message for dates and timing.
-	 *
-	 * @param array $value Dates field value.
-	 *
-	 * @return bool
-	 */
-	public function dates_required( $value ) {
-
-		$this->form_validation->set_message(
-			'dates_required',
-			'Why not attending any sessions? Please select dates and time.'
-		);
-
-		return ! empty( $value );
 	}
 
 	/**
@@ -349,36 +173,46 @@ class Registration extends CI_Controller {
 	 */
 	public function is_duplicate() {
 
-		if ( empty( $this->input->post( 'name' ) ) ) {
+		$name = $this->input->post( 'name' );
+
+		if ( empty( $name ) ) {
 			return false;
 		}
+
+		$this->load->model( 'front/registration_model' );
 
 		return $this->registration_model->is_duplicate();
 	}
 
 	/**
-	 * Get registrant names by church.
+	 * Upload files to the directory.
 	 *
-	 * @return json
+	 * @return void
 	 */
-	public function get_registrants() {
+	public function upload_images() {
 
-		$data = array();
+		// Get the upload key.
+		$key = $this->uri->segment( 3 );
 
-		// Get the church id from url.
-		$id = $this->uri->segment( 3 );
-
-		// Do not continue if valid id is not found.
-		if ( ! empty( $id ) ) {
-
-			$this->load->model( 'front/registration_model' );
-
-			// Get pre registered users.
-			$data = $this->registration_model->get_registrants( $id );
-
-			$data = array_map( 'reset', $data );
+		if ( empty( $key ) ) {
+			return;
 		}
 
-		echo json_encode( $data );
+		$dir = './uploads/' . $key;
+
+		if ( ! file_exists( $dir ) ) {
+			mkdir( $dir, 0777, true );
+		}
+
+		$config['upload_path'] = $dir . '/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['encrypt_name'] = false;
+		$config['overwrite'] = true;
+
+		// Load upload library.
+		$this->load->library( 'upload', $config );
+
+		// If file uploaded, set upload key.
+		$this->upload->do_upload( 'file' );
 	}
 }

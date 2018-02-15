@@ -45,36 +45,5 @@ $( function ( $ ) {
 
         // Hide success/error messages after 2 seconds.
         $( '.callout' ).delay( 2000 ).fadeOut( 400 );
-
-        // On day check.
-        $( '.day' ).on( 'ifToggled', function() {
-            // Id of the checked date.
-            var id = $( this ).attr( 'id' ),
-                // class if children timings.
-                children = $( '.' + id + '' );
-
-            // If date was checked, then auto check timings.
-            if ( $( this ).prop( 'checked' ) ) {
-                children.iCheck( 'enable' );
-                children.iCheck( 'check' );
-            } else {
-                children.iCheck( 'uncheck' );
-                children.iCheck( 'disable' );
-            }
-        });
-
-        // Shortcut to select all dates and timing.
-        $( '#all_days' ).on( 'ifChecked', function() {
-            $( '.day' ).not( '.disabled' ).iCheck( 'check' );
-        });
-
-        // Get the pre registered names on church selection.
-        $( '#church' ).on( 'change', function() {
-            $.getJSON( baseUrl + '/get/registrants/' + $( this ).val(), function( data ) {
-                $( "#name" ).autocomplete({
-                    source: data
-                });
-            });
-        });
     });
 });

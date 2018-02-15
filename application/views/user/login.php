@@ -5,7 +5,7 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 
 <div class="login-box login-box-small">
 	<div class="login-logo">
-		<a href="#"><b>Camp</b> Registration</a>
+		<a href="#"><b>Gamos</b> Search</a>
 	</div>
 
 	<?php $error = $this->session->flashdata( 'error' ); ?>

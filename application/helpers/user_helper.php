@@ -39,20 +39,10 @@ function is_admin() {
  *
  * @return bool
  */
-function force_login( $user = '' ) {
-
-	// Get core instance.
-	$ci =& get_instance();
+function force_login() {
 
 	// Check if user is logged in.
 	if ( ! is_loggedin() ) {
-		redirect( 'login' );
-	}
-
-	if ( $user === 'admin' && ! is_admin() ) {
-		// Show error message.
-		$ci->session->set_flashdata( 'error', 'Please login as admin.' );
-
 		redirect( 'login' );
 	}
 }

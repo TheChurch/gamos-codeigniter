@@ -100,11 +100,7 @@ class User extends CI_Controller {
 		// Continue only if logged in.
 		if ( is_loggedin() ) {
 			// Admins to admin page.
-			if ( (bool) $this->session->userdata( 'is_admin' ) ) {
-				redirect( 'admin' );
-			} else {
-				redirect( 'registration' );
-			}
+			redirect( 'dashboard' );
 		}
 	}
 	

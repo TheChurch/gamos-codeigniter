@@ -24,6 +24,6 @@
 <!-- Select2 -->
 <script src="<?= base_url( 'assets/plugins/select2/js/select2.min.js' ) ?>"></script>
 <!-- Custom purposes -->
-<script src="<?= base_url( 'assets/dist/js/admin/attendees.min.js'); ?>"></script>
+<script src="<?= base_url( 'assets/dist/js/admin/profiles.min.js'); ?>"></script>
 </body>
 </html>

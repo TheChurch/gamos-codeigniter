@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Camp Registration | Admin</title>
+  <title><?php echo empty( $title ) ? 'Dashboard' : $title; ?> | Gamos Search</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?= base_url( 'assets/components/bootstrap/dist/css/bootstrap.min.css'); ?>">
   <!-- DataTables -->
   <link rel="stylesheet" href="<?= base_url( 'assets/components/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>">
+  <!-- Font awesome -->
+  <link rel="stylesheet" href="<?= base_url( 'assets/components/font-awesome/css/font-awesome.min.css'); ?>">
   <!-- Select2 -->
   <link rel="stylesheet" href="<?= base_url( 'assets/plugins/select2/css/select2.min.css' ) ?>">
   <!-- Theme style -->
@@ -28,17 +30,10 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b> - Reports</span>
+      <span class="logo-lg"><b>Gamos</b> - Dashboard</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
 
       <input type="hidden" id="base_url" value="<?= base_url(); ?>">
 
@@ -48,7 +43,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="<?= base_url( 'assets/dist/img/user2-160x160.jpg'); ?>" class="user-image" alt="User Image">
-              <span class="hidden-xs">Welcome, Admin</span>
+              <span class="hidden-xs">Welcome, <?php echo $this->session->userdata( 'username' ) ? 'User' : ucwords( $this->session->userdata( 'username' ) ); ?></span>
             </a>
           </li>
         </ul>
