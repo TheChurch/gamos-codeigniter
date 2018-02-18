@@ -1,4 +1,4 @@
-<div class="register-box" xmlns="http://www.w3.org/1999/html">
+<div class="register-box pull-left" xmlns="http://www.w3.org/1999/html">
 	<div class="register-logo">
 		<a href="javascript:void(0);"><b>Profile</b> Registration</a>
 	</div>
@@ -120,11 +120,11 @@
 									<label>Education</label>
 									<select class="form-control select2" name="education" id="education" required>
 										<option value="">Select education</option>
-										<?php if ( ! empty( $educations ) ) : ?>
-											<?php foreach ( $educations as $education ) : ?>
-												<option value="<?= $education->id ?>" <?= set_select( 'education', $education->id ); ?>><?= $education->title ?></option>
-											<?php endforeach; ?>
-										<?php endif; ?>
+										<option value="none" <?= set_select( 'education', 'none' ); ?>>None</option>
+										<option value="hs" <?= set_select( 'education', 'hs' ); ?>>High School</option>
+										<option value="hsc" <?= set_select( 'education', 'hsc' ); ?>>Higher Secondary</option>
+										<option value="ug" <?= set_select( 'education', 'ug' ); ?>>Graduate</option>
+										<option value="pg" <?= set_select( 'education', 'pg' ); ?>>Post Graduate</option>
 									</select>
 								</div>
 							</div>
@@ -141,11 +141,10 @@
 									<label>Job</label>
 									<select class="form-control select2" name="job" id="job" required>
 										<option value="">Select job</option>
-										<?php if ( ! empty( $jobs ) ) : ?>
-											<?php foreach ( $jobs as $job ) : ?>
-												<option value="<?= $job->id ?>" <?= set_select( 'job', $job->id ); ?>><?= $job->title ?></option>
-											<?php endforeach; ?>
-										<?php endif; ?>
+										<option value="none" <?= set_select( 'job', 'none' ); ?>>None</option>
+										<option value="private" <?= set_select( 'job', 'private' ); ?>>Private</option>
+										<option value="govt" <?= set_select( 'job', 'govt' ); ?>>Government</option>
+										<option value="business" <?= set_select( 'job', 'business' ); ?>>Business</option>
 									</select>
 								</div>
 							</div>

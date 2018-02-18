@@ -45,6 +45,7 @@ $( function ( $ ) {
             'processing': true,
             'serverSide': true,
             'searching': false,
+            'order': [[ 0, 'desc' ]],
             'ajax': {
                 'url': baseUrl + 'data/get-profiles',
                 'type': 'POST',
@@ -62,7 +63,7 @@ $( function ( $ ) {
             },
             "columnDefs": [{
                 'orderable': false,
-                'targets': [0,2,7]
+                'targets': [0,1,6]
             }],
         });
 

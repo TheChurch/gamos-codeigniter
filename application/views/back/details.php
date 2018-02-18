@@ -74,26 +74,26 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 							<?php $pimg = $profile->gender === 'M' ? 'male.png' : 'female.png'; ?>
 							<img class="profile-user-img img-responsive img-circle" src="<?= base_url( 'assets/dist/img/' . $pimg ); ?>" alt="User profile picture">
 
-							<h3 class="profile-username text-center"><?= $profile->name; ?></h3>
+							<h3 class="profile-username text-center"><?= isset( $profile->name ) ? $profile->name : '' ?></h3>
 
-							<p class="text-muted text-center"><?= $profile->job; ?></p>
+							<p class="text-muted text-center"><?= isset( $profile->church ) ? $profile->church : ''; ?></p>
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item">
-									<b>Age</b> <a class="pull-right"><b><?= getAge( $profile->dob ); ?></b></a>
+									<b>Age</b> <a class="pull-right"><b><?= isset( $profile->dob ) ? getAge( $profile->dob ) : 'Unknown'; ?></b></a>
 								</li>
 								<li class="list-group-item">
 									<?php $dob = date( 'd-m-Y', strtotime( $profile->dob ) ); ?>
 									<b>Date of Birth</b> <a class="pull-right"><b><?= $dob; ?></b></a>
 								</li>
 								<li class="list-group-item">
-									<b>Gender</b> <a class="pull-right"><b><?= getGender( $profile->gender ); ?></b></a>
+									<b>Gender</b> <a class="pull-right"><b><?= isset( $profile->gender ) ? getGender( $profile->gender ) : ''; ?></b></a>
 								</li>
 								<li class="list-group-item">
-									<b>Height</b> <a class="pull-right"><b><?= $profile->height; ?> cm</b></a>
+									<b>Height</b> <a class="pull-right"><b><?= isset( $profile->height ) ? $profile->height : 'Unknown'; ?> cm</b></a>
 								</li>
 								<li class="list-group-item">
-									<b>Weight</b> <a class="pull-right"><b><?= $profile->weight; ?> kg</b></a>
+									<b>Weight</b> <a class="pull-right"><b><?= isset( $profile->weight ) ? $profile->weight : 'Unknowns'; ?> kg</b></a>
 								</li>
 							</ul>
 
@@ -110,10 +110,10 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 						<!-- /.box-header -->
 						<div class="box-body">
 							<strong><i class="fa fa-graduation-cap margin-r-5"></i> Education</strong>
-							<p class="text-muted"><?= $profile->education; ?> - <?= $profile->education_details; ?></p>
+							<p class="text-muted"><?= isset( $profile->education ) ? getEducation( $profile->education ) : 'Unknown'; ?><?php empty( $profile->education_details ) ? '' : ' - ' . $profile->education_details; ?></p>
 							<hr>
 							<strong><i class="fa fa-suitcase margin-r-5"></i> Job</strong>
-							<p class="text-muted"><?= $profile->job; ?> - <?= $profile->job_details; ?></p>
+							<p class="text-muted"><?= isset( $profile->job ) ? getJob( $profile->job ) : 'Unknown'; ?><?php empty( $profile->job_details ) ? '' : ' - ' . $profile->job_details; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->
@@ -128,13 +128,13 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 						<!-- /.box-header -->
 						<div class="box-body">
 							<strong><i class="fa fa-book margin-r-5"></i> Church</strong>
-							<p class="text-muted"><?= $profile->church; ?></p>
+							<p class="text-muted"><?= isset( $profile->church ) ? $profile->church : 'Unknown'; ?></p>
 							<hr>
 							<strong><i class="fa fa-map-marker margin-r-5"></i> District</strong>
-							<p class="text-muted"><?= $profile->district; ?></p>
+							<p class="text-muted"><?= isset( $profile->district ) ? $profile->district : 'Unknown'; ?></p>
 							<hr>
 							<strong><i class="fa fa-map-marker margin-r-5"></i> State</strong>
-							<p class="text-muted"><?= $profile->state; ?></p>
+							<p class="text-muted"><?= isset( $profile->state ) ? $profile->state : 'Unknown'; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->
@@ -153,19 +153,19 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 						<!-- /.box-header -->
 						<div class="box-body">
 							<strong><i class="fa fa-male margin-r-5"></i> Father's Name</strong>
-							<p class="text-muted"><?= $profile->father_name; ?></p>
+							<p class="text-muted"><?= isset( $profile->father_name ) ? $profile->father_name : ''; ?></p>
 							<hr>
 
 							<strong><i class="fa fa-suitcase margin-r-5"></i> Father's Occupation</strong>
-							<p class="text-muted"><?= $profile->father_occupation; ?></p>
+							<p class="text-muted"><?= isset( $profile->father_occupation ) ? $profile->father_occupation : ''; ?></p>
 							<hr>
 
 							<strong><i class="fa fa-female margin-r-5"></i> Mother's Name</strong>
-							<p class="text-muted"><?= $profile->mother_name; ?></p>
+							<p class="text-muted"><?= isset( $profile->mother_name ) ? $profile->mother_name : ''; ?></p>
 							<hr>
 
 							<strong><i class="fa fa-user margin-r-5"></i> Church Elder's Name</strong>
-							<p class="text-muted"><?= $profile->elder_name; ?></p>
+							<p class="text-muted"><?= isset( $profile->elder_name ) ? $profile->elder_name : ''; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->

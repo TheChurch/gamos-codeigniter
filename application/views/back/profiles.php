@@ -147,11 +147,11 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 			                                <label>Education</label>
 			                                <select class="form-control profile-filter select2" id="education" name="education">
 				                                <option value="">Select education</option>
-				                                <?php if ( ! empty( $educations ) ) : ?>
-					                                <?php foreach ( $educations as $education ) : ?>
-						                                <option value="<?= $education->id ?>"><?= $education->name ?></option>
-					                                <?php endforeach; ?>
-				                                <?php endif; ?>
+				                                <option value="none">None</option>
+				                                <option value="hs">High School</option>
+				                                <option value="hsc">Higher Secondary</option>
+				                                <option value="ug">Graduate</option>
+				                                <option value="pg">Post Graduate</option>
 			                                </select>
 		                                </div>
 	                                </div>
@@ -160,11 +160,10 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 			                                <label>Job</label>
 			                                <select class="form-control profile-filter select2" id="job" name="job">
 				                                <option value="">Select job</option>
-				                                <?php if ( ! empty( $jobs ) ) : ?>
-					                                <?php foreach ( $jobs as $job ) : ?>
-						                                <option value="<?= $job->id ?>"><?= $job->name ?></option>
-					                                <?php endforeach; ?>
-				                                <?php endif; ?>
+				                                <option value="none">None</option>
+				                                <option value="private">Private</option>
+				                                <option value="govt">Government</option>
+				                                <option value="business">Business</option>
 			                                </select>
 		                                </div>
 	                                </div>
@@ -194,7 +193,6 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 							<table id="profiles_table" class="table table-bordered table-striped">
 								<thead>
 									<tr>
-										<th>Image</th>
 										<th>Name</th>
 										<th>Gender</th>
 										<th>Age</th>

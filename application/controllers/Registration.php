@@ -43,8 +43,6 @@ class Registration extends CI_Controller {
 		$data['states'] = $this->data_model->get_states();
 		$data['districts'] = $this->data_model->get_districts();
 		$data['churches'] = $this->data_model->get_churches();
-		$data['educations'] = $this->data_model->get_educations();
-		$data['jobs'] = $this->data_model->get_jobs();
 
 		// Render html.
 		$this->load->view( 'front/common/header' );
@@ -117,6 +115,7 @@ class Registration extends CI_Controller {
 			'elder_name' => trim( $this->input->post( 'elder_name' ) ),
 			'elder_number' => (int) $this->input->post( 'elder_number' ),
 			'upload_key' => (int) $this->input->post( 'upload_key' ),
+			'status' => is_admin() ? 1 : 0,
 		);
 
 		// Insert attendee personal data and get attendee id.
@@ -149,10 +148,10 @@ class Registration extends CI_Controller {
 		$this->form_validation->set_rules( 'weight', 'weight', 'trim|required|integer' );
 		$this->form_validation->set_rules( 'state', 'state', 'trim|required|integer' );
 		$this->form_validation->set_rules( 'district', 'district', 'trim|required' );
-		$this->form_validation->set_rules( 'education', 'education', 'trim|required|integer' );
-		$this->form_validation->set_rules( 'education_details', 'education_details', 'trim|required' );
-		$this->form_validation->set_rules( 'job', 'job', 'trim|required|integer' );
-		$this->form_validation->set_rules( 'job_details', 'job_details', 'trim|required' );
+		$this->form_validation->set_rules( 'education', 'education', 'trim|required' );
+		$this->form_validation->set_rules( 'education_details', 'education_details', 'trim' );
+		$this->form_validation->set_rules( 'job', 'job', 'trim|required' );
+		$this->form_validation->set_rules( 'job_details', 'job_details', 'trim' );
 		$this->form_validation->set_rules( 'father_name', 'father_name', 'trim|required' );
 		$this->form_validation->set_rules( 'father_occupation', 'father_occupation', 'trim|required' );
 		$this->form_validation->set_rules( 'father_number', 'father_number', 'trim|required|integer' );

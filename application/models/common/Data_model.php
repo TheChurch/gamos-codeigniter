@@ -79,32 +79,4 @@ class Data_model extends CI_Model {
 
 		return $this->db->get()->result();
 	}
-
-	/**
-	 * Get list of educations.
-	 *
-	 * @access public
-	 *
-	 * @return array
-	 */
-	public function get_educations() {
-
-		$this->db->from( 'educations' );
-
-		return $this->db->get()->result();
-	}
-
-	/**
-	 * Get list of jobs.
-	 *
-	 * @access public
-	 *
-	 * @return array
-	 */
-	public function get_jobs() {
-
-		$this->db->from( 'jobs' );
-
-		return $this->db->get()->result();
-	}
 }

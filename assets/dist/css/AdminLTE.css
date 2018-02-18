@@ -12,6 +12,11 @@
 html,
 body {
   height: 100%;
+  background-image: url(../img/cover.jpg);
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
 .layout-boxed html,
 .layout-boxed body {
@@ -3420,14 +3425,14 @@ table.text-center th {
 .register-logo a {
   color: #444;
 }
-.login-page,
-.register-page {
-  background: #d2d6de;
-}
 .login-box,
 .register-box {
-  width: 50%;
-  margin: 7% auto;
+  width: 45%;
+  margin: 5% auto;
+  margin-left: 5%;
+}
+.login-box {
+  margin-left: auto;
 }
 .login-box-small {
   width: 360px;

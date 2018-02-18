@@ -39,10 +39,6 @@ class Dashboard extends CI_Controller {
 
 		// Get church list.
 		$data['churches'] = $this->data_model->get_churches();
-		// Get education list.
-		$data['educations'] = $this->data_model->get_educations();
-		// Get job list.
-		$data['jobs'] = $this->data_model->get_jobs();
 
 		// Render html.
 		$this->load->view( 'back/common/header' );
@@ -89,8 +85,12 @@ class Dashboard extends CI_Controller {
 
 			$this->load->model( 'back/profiles_model' );
 
+			$result = $this->profiles_model->delete_profile( base64_decode( $id ) );
 			// Attempt to delete attendee.
-			if ( $this->profiles_model->delete_profile( base64_decode( $id ) ) ) {
+			if ( $result ) {
+				// Delete profile images.
+				$this->delete_images( (int) $result );
+
 				$this->session->set_flashdata( 'success', 'Profile deleted.' );
 			} else {
 				$this->session->set_flashdata( 'error', 'Oops! Could not delete the profile.' );
@@ -165,5 +165,31 @@ class Dashboard extends CI_Controller {
 		$images = preg_grep( '/\.jpg|.png|.gif|.jpeg$/i', $images );
 
 		return $images;
+	}
+
+	/**
+	 * Delelte profile image directory and images.
+	 *
+	 * @param string $key Upload key.
+	 *
+	 * @return bool|string
+	 */
+	private function delete_images( $key ) {
+
+		// Get the real path.
+		$dir =  realpath( APPPATH . '../uploads/' . $key );
+
+		try {
+			// Do not continue if not a directory.
+			if ( ! is_dir( $dir ) ) {
+				return true;
+			}
+			// Delete the folder and contents.
+			return system( 'rm -rf ' . escapeshellarg( $dir ) );
+
+		} catch(Exception $e) {
+
+			return false;
+		}
 	}
 }
