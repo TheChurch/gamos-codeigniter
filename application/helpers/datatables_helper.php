@@ -22,15 +22,18 @@ function getGender( $gender ) {
  *
  * @return string
  */
-function getActionsLink( $id ) {
+function getActionsLink( $id, $status ) {
 
 	$content = '';
 	if ( ! empty( $id ) ) {
-		$content .= '<a href="' . base_url( 'dashboard/profile/view/' . base64_encode( $id ) ) . '" class="view" title="View details" target="_blank"><button type="button" class="btn btn-success btn-xs">View Details</button></a>';
+		$content .= '<a href="' . base_url( 'dashboard/profile/view/' . base64_encode( $id ) ) . '" class="view" title="View details" target="_blank"><button type="button" class="btn btn-success btn-xs">View</button></a>';
 		if ( is_admin() ) {
-			$content .= ' <a href="#" class="edit" title="Edit profile"><button type="button" class="btn btn-warning btn-xs">Edit</button></a>';
+			$content .= ' <a href="' . base_url( 'dashboard/profile/edit/' . base64_encode( $id ) ) . '" class="edit" title="Edit profile" target="_blank"><button type="button" class="btn btn-warning btn-xs">Edit</button></a>';
+			$content .= ' <a href="' . base_url( 'dashboard/profile/delete/' . base64_encode( $id ) ) . '" class="delete" title="Delete profile"><button type="button" class="btn btn-danger btn-xs">Delete</button></a>';
+			if ( (int) $status === 0 ) {
+				$content .= ' <a href="' . base_url( 'dashboard/profile/approve/' . base64_encode( $id ) ) . '" class="delete" title="Approve profile"><button type="button" class="btn btn-info btn-xs">Approve</button></a>';
+			}
 		}
-		$content .= ' <a href="' . base_url( 'profile/delete/' . base64_encode( $id ) ) . '" class="delete" title="Delete profile"><button type="button" class="btn btn-danger btn-xs">Delete</button></a>';
 	}
 
 	return $content;

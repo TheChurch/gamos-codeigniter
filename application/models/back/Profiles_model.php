@@ -40,7 +40,7 @@ class Profiles_model extends CI_Model {
 		$this->load->library( array( 'Datatables' ) );
 
 		// Start db query.
-		$this->datatables->select( 'pf.name, pf.gender, pf.dob, ch.name as church, pf.education, pf.job, pf.id' );
+		$this->datatables->select( 'pf.name, pf.gender, pf.dob, ch.name as church, pf.education, pf.job, pf.id, pf.status' );
 		$this->datatables->from( 'profiles as pf' );
 		$this->datatables->join( 'churches as ch', 'pf.church = ch.id' );
 
@@ -64,12 +64,16 @@ class Profiles_model extends CI_Model {
 
 		// Age from filter.
 		if ( ! empty( $post['age_from'] ) ) {
-			$this->datatables->where( 'pf.age >=', (int) $post['age_from'] );
+			$age_from = strtotime( '-' . (int) $post['age_from'] . ' year', time() );
+			$age_from = date( 'Y-m-d', $age_from );
+			$this->datatables->where( 'pf.dob <=', $age_from );
 		}
 
 		// Age to filter.
 		if ( ! empty( $post['age_to'] ) ) {
-			$this->datatables->where( 'pf.age <=', (int) $post['age_to'] );
+			$age_to = strtotime( '-' . (int) $post['age_to'] . ' year', time() );
+			$age_to = date( 'Y-m-d', $age_to );
+			$this->datatables->where( 'pf.dob >=', $age_to );
 		}
 
 		// State filter.
@@ -92,7 +96,13 @@ class Profiles_model extends CI_Model {
 			$this->datatables->where( 'pf.job', $post['job'] );
 		}
 
+		// Status filter.
+		if ( isset( $post['status'] ) && in_array( $post['status'], array( '0', '1' ) ) && is_admin() ) {
+			$this->datatables->where( 'pf.status', $post['status'] );
+		}
+
 		$this->datatables->unset_column( 'id' );
+		$this->datatables->unset_column( 'status' );
 
 		$this->datatables->edit_column( 'name', '$1', 'getCaps(name)' );
 		// Add gender full text instead of short term from db.
@@ -104,7 +114,7 @@ class Profiles_model extends CI_Model {
 		// Get job.
 		$this->datatables->edit_column( 'job', '$1', 'getJob(job)' );
 		// Add actions.
-		$this->datatables->add_column( 'delete', '$1', 'getActionsLink(id)' );
+		$this->datatables->add_column( 'delete', '$1', 'getActionsLink(id, status)' );
 
 		return $this->datatables->generate();
 	}
@@ -132,6 +142,24 @@ class Profiles_model extends CI_Model {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Approve a pending profile.
+	 *
+	 * @param int $id Profile ID.
+	 *
+	 * @access public
+	 *
+	 * @return bool
+	 */
+	public function approve_profile( $id ) {
+
+		$this->db->set( 'status', 1 );
+		$this->db->where( 'id', $id );
+		$this->db->update( 'profiles' );
+
+		return $this->db->affected_rows() > 0;
 	}
 
 	/**
@@ -166,14 +194,32 @@ class Profiles_model extends CI_Model {
 	 */
 	public function profile_details( $id ) {
 
-		$this->db->select( '*, pf.name as name, ch.name as church, st.name as state, ds.name as district' );
+		$this->db->select( '*, pf.name as name, pf.id as profile_id, ch.name as church_name, st.name as state_name, ds.name as district_name' );
 		$this->db->from( 'profiles as pf' );
 		$this->db->join( 'churches as ch', 'pf.church = ch.id' );
 		$this->db->join( 'states as st', 'pf.state = st.id' );
 		$this->db->join( 'districts as ds', 'pf.district = ds.id' );
-		$this->db->from( 'profiles' );
 		$this->db->where( 'pf.id', $id );
+		$this->db->group_by( 'pf.id' );
 
 		return $this->db->get()->row();
+	}
+
+	/**
+	 * Update profile data.
+	 *
+	 * @access public
+	 *
+	 * @param array $data Profile data.
+	 * @param int $id Profile ID.
+	 *
+	 * @return bool true on success, false on failure
+	 */
+	public function update( $data, $id ) {
+
+		$this->db->where( 'id', $id );
+		$this->db->update( 'profiles', $data );
+
+		return $this->db->affected_rows() > 0;
 	}
 }

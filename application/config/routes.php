@@ -57,8 +57,11 @@ $route['logout'] = 'user/logout';
 
 $route['dashboard/profiles'] = 'dashboard/index';
 $route['data/get-profiles'] = 'dashboard/get_profiles';
-$route['profile/delete/(:any)'] = 'dashboard/delete_profile/$1';
-$route['dashboard/profile/view/(:any)'] = 'dashboard/view_details/$1';
+$route['dashboard/profile/delete/(:any)'] = 'dashboard/delete_profile/$1';
+$route['dashboard/profile/view/(:any)'] = 'dashboard/view_profile/$1';
+$route['dashboard/profile/edit/(:any)'] = 'dashboard/edit_profile/$1';
+$route['dashboard/profile/update/(:any)'] = 'dashboard/update_profile/$1';
+$route['dashboard/profile/approve/(:any)'] = 'dashboard/approve_profile/$1';
 
 $route['default_controller'] = 'registration';
 $route['404_override'] = '';

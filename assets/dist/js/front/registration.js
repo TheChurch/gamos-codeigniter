@@ -43,6 +43,12 @@ $( function ( $ ) {
             width: '100%'
         });
 
+        // Show loading message on registration button click.
+        $( '#registration-form' ).on( 'submit', function() {
+            $( '#register-submit' ).text( 'Please wait..' );
+            $( '#register-submit' ).prop( 'disabled', true );
+        });
+
         // Hide success/error messages after 2 seconds.
         $( '.callout' ).delay( 2000 ).fadeOut( 400 );
     });

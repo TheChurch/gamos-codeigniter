@@ -72,6 +72,7 @@ class User extends CI_Controller {
 				// Set session data.
 				$_SESSION['user_id'] = (int) $user->id;
 				$_SESSION['username'] = $user->username;
+				$_SESSION['role'] = $user->role;
 				$_SESSION['is_admin'] = (bool) $user->is_admin;
 
 				// Redirect to proper page.

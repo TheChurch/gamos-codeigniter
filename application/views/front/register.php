@@ -68,13 +68,13 @@
 								<div class="col-xs-3">
 									<div class="form-group">
 										<label>Height (cm)</label>
-										<input type="number" name="height" id="height" min="1" class="form-control" placeholder="Height in c.m" value="<?= set_value( 'height' ); ?>" required>
+										<input type="number" name="height" id="height" class="form-control" placeholder="Height in c.m" value="<?= set_value( 'height' ); ?>">
 									</div>
 								</div>
 								<div class="col-xs-3">
 									<div class="form-group">
 										<label>Weight (kg)</label>
-										<input type="number" name="weight" id="weight" min="1" class="form-control" placeholder="Weight in kg" value="<?= set_value( 'weight' ); ?>" required>
+										<input type="number" name="weight" id="weight" class="form-control" placeholder="Weight in kg" value="<?= set_value( 'weight' ); ?>">
 									</div>
 								</div>
 							</div>
@@ -131,7 +131,7 @@
 							<div class="col-xs-6">
 								<div class="form-group has-feedback">
 									<label>Education Details</label>
-									<input name="education_details" id="education_details" class="form-control" placeholder="Education details" value="<?= set_value( 'education_details' ); ?>" required>
+									<input name="education_details" id="education_details" class="form-control" placeholder="Education details" value="<?= set_value( 'education_details' ); ?>">
 								</div>
 							</div>
 						</div>
@@ -151,7 +151,7 @@
 							<div class="col-xs-6">
 								<div class="form-group has-feedback">
 									<label>Job Details</label>
-									<input name="job_details" id="job_details" class="form-control" placeholder="Job details" value="<?= set_value( 'job_details' ); ?>" required>
+									<input name="job_details" id="job_details" class="form-control" placeholder="Job details" value="<?= set_value( 'job_details' ); ?>">
 								</div>
 							</div>
 						</div>
@@ -174,7 +174,7 @@
 							<div class="col-xs-6">
 								<div class="form-group">
 									<label>Father's Occupation</label>
-									<input name="father_occupation" id="father_occupation" class="form-control" placeholder="Father's occupation" value="<?= set_value( 'father_occupation' ); ?>" required>
+									<input name="father_occupation" id="father_occupation" class="form-control" placeholder="Father's occupation" value="<?= set_value( 'father_occupation' ); ?>">
 								</div>
 							</div>
 						</div>
@@ -189,7 +189,7 @@
 							<div class="col-xs-6">
 								<div class="form-group has-feedback">
 									<label>Mother's Name</label>
-									<input name="mother_name" id="mother_name" class="form-control" placeholder="Full name" value="<?= set_value( 'mother_name' ); ?>" required>
+									<input name="mother_name" id="mother_name" class="form-control" placeholder="Full name" value="<?= set_value( 'mother_name' ); ?>">
 									<span class="glyphicon glyphicon-user form-control-feedback"></span>
 								</div>
 							</div>
@@ -231,7 +231,7 @@
 
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+						<button type="submit" id="register-submit" class="btn btn-primary btn-block btn-flat">Register</button>
 					</div>
 				</div>
 		</form>

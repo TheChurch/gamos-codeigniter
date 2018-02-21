@@ -45,12 +45,16 @@ $( function ( $ ) {
             'processing': true,
             'serverSide': true,
             'searching': false,
-            'order': [[ 0, 'desc' ]],
+            'order': [[ 0, 'asc' ]],
+            'pageLength': 50,
             'ajax': {
                 'url': baseUrl + 'data/get-profiles',
                 'type': 'POST',
                 'data' : function ( data ) {
                     data.name = $( '#name' ).val();
+                    if ( $( '#status' ).length > 0 ) {
+                        data.status = $( '#status' ).val();
+                    }
                     data.church = $( '#church' ).val();
                     data.gender = $( '#gender' ).val();
                     data.age_from = $( '#age_from' ).val();

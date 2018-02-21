@@ -22,10 +22,18 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 				<li class="header">Profiles</li>
 				<li class="treeview active">
 					<a href="<?= base_url( 'dashboard/profiles' ); ?>">
-						<i class="fa fa-table"></i> <span>Profile List</span>
-						<span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+						<i class="fa fa-users"></i> <span>Profile List</span>
+					</a>
+				</li>
+				<li class="treeview">
+					<a href="<?= base_url(); ?>" target="_blank">
+						<i class="fa fa-user-plus"></i> <span>Add Profile</span>
+					</a>
+				</li>
+				<li class="header">Other</li>
+				<li class="treeview">
+					<a href="<?= base_url( 'dashboard/contact' ); ?>" target="">
+						<i class="fa fa-envelope"></i> <span>Conact Us</span>
 					</a>
 				</li>
 			</ul>
@@ -50,22 +58,6 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 		<!-- Main content -->
 		<section class="content">
 			<div class="row">
-				<div class="col-xs-12">
-					<?php $error = $this->session->flashdata( 'error' ); ?>
-					<?php $success = $this->session->flashdata( 'success' ); ?>
-					<?php if ( isset( $error ) ) : ?>
-						<div class="callout callout-danger">
-							<?= $error ?>
-						</div>
-					<?php elseif ( isset( $success ) ) : ?>
-						<div class="callout callout-success">
-							<?= $success ?>
-						</div>
-					<?php endif; ?>
-				</div>
-				<!-- /.col -->
-			</div>
-			<div class="row">
 				<div class="col-md-3">
 
 					<!-- Profile Image -->
@@ -76,7 +68,7 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 
 							<h3 class="profile-username text-center"><?= isset( $profile->name ) ? $profile->name : '' ?></h3>
 
-							<p class="text-muted text-center"><?= isset( $profile->church ) ? $profile->church : ''; ?></p>
+							<p class="text-muted text-center"><?= isset( $profile->church_name ) ? $profile->church_name : ''; ?></p>
 
 							<ul class="list-group list-group-unbordered">
 								<li class="list-group-item">
@@ -110,10 +102,10 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 						<!-- /.box-header -->
 						<div class="box-body">
 							<strong><i class="fa fa-graduation-cap margin-r-5"></i> Education</strong>
-							<p class="text-muted"><?= isset( $profile->education ) ? getEducation( $profile->education ) : 'Unknown'; ?><?php empty( $profile->education_details ) ? '' : ' - ' . $profile->education_details; ?></p>
+							<p class="text-muted"><?= isset( $profile->education ) ? getEducation( $profile->education ) : 'Unknown'; ?><?php echo empty( $profile->education_details ) ? '' : ' - ' . $profile->education_details; ?></p>
 							<hr>
 							<strong><i class="fa fa-suitcase margin-r-5"></i> Job</strong>
-							<p class="text-muted"><?= isset( $profile->job ) ? getJob( $profile->job ) : 'Unknown'; ?><?php empty( $profile->job_details ) ? '' : ' - ' . $profile->job_details; ?></p>
+							<p class="text-muted"><?= isset( $profile->job ) ? getJob( $profile->job ) : 'Unknown'; ?><?php echo empty( $profile->job_details ) ? '' : ' - ' . $profile->job_details; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->
@@ -128,13 +120,13 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 						<!-- /.box-header -->
 						<div class="box-body">
 							<strong><i class="fa fa-book margin-r-5"></i> Church</strong>
-							<p class="text-muted"><?= isset( $profile->church ) ? $profile->church : 'Unknown'; ?></p>
+							<p class="text-muted"><?= isset( $profile->church_name ) ? $profile->church_name : 'Unknown'; ?></p>
 							<hr>
 							<strong><i class="fa fa-map-marker margin-r-5"></i> District</strong>
-							<p class="text-muted"><?= isset( $profile->district ) ? $profile->district : 'Unknown'; ?></p>
+							<p class="text-muted"><?= isset( $profile->district_name ) ? $profile->district_name : 'Unknown'; ?></p>
 							<hr>
 							<strong><i class="fa fa-map-marker margin-r-5"></i> State</strong>
-							<p class="text-muted"><?= isset( $profile->state ) ? $profile->state : 'Unknown'; ?></p>
+							<p class="text-muted"><?= isset( $profile->state_name ) ? $profile->state_name : 'Unknown'; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->
@@ -156,16 +148,35 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 							<p class="text-muted"><?= isset( $profile->father_name ) ? $profile->father_name : ''; ?></p>
 							<hr>
 
-							<strong><i class="fa fa-suitcase margin-r-5"></i> Father's Occupation</strong>
-							<p class="text-muted"><?= isset( $profile->father_occupation ) ? $profile->father_occupation : ''; ?></p>
+							<!--<strong><i class="fa fa-suitcase margin-r-5"></i> Father's Occupation</strong>
+							<p class="text-muted"><?php // isset( $profile->father_occupation ) ? $profile->father_occupation : ''; ?></p>
 							<hr>
 
 							<strong><i class="fa fa-female margin-r-5"></i> Mother's Name</strong>
-							<p class="text-muted"><?= isset( $profile->mother_name ) ? $profile->mother_name : ''; ?></p>
-							<hr>
+							<p class="text-muted"><?php // isset( $profile->mother_name ) ? $profile->mother_name : ''; ?></p>
+							<hr>-->
 
 							<strong><i class="fa fa-user margin-r-5"></i> Church Elder's Name</strong>
 							<p class="text-muted"><?= isset( $profile->elder_name ) ? $profile->elder_name : ''; ?></p>
+							<hr>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+
+					<!-- Profile Image -->
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Contact Numbers</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<strong><i class="fa fa-phone margin-r-5"></i> Father's Number</strong>
+							<p class="text-muted"><?= isset( $profile->father_number ) ? $profile->father_number : ''; ?></p>
+							<hr>
+
+							<strong><i class="fa fa-phone margin-r-5"></i> Church Elder's Number</strong>
+							<p class="text-muted"><?= isset( $profile->elder_number ) ? $profile->elder_number : ''; ?></p>
 							<hr>
 						</div>
 						<!-- /.box-body -->
@@ -203,7 +214,9 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 									</a>
 								<?php endif; ?>
 								<?php if ( $img_count === 0 ) : ?>
-									<p class="text-red">No images found.</p>
+									<div class="item active">
+										<p class="text-red">No images found.</p>
+									</div>
 								<?php endif; ?>
 							</div>
 						</div>

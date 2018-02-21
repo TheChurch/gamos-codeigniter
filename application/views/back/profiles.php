@@ -12,7 +12,7 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 					<img src="<?= base_url( 'assets/dist/img/user2-160x160.jpg'); ?>" class="img-circle" alt="User Image">
 				</div>
 				<div class="pull-left info">
-					<p><?php echo $this->session->userdata( 'username' ) ? 'User' : ucwords( $this->session->userdata( 'username' ) ); ?></p>
+					<p><?php echo $this->session->userdata( 'username' ) ? ucwords( $this->session->userdata( 'username' ) ) : 'User'; ?></p>
 					<a href="<?= base_url( 'logout' ); ?>"><i class="fa fa-circle text-success"></i> Logout</a>
 				</div>
 			</div>
@@ -22,10 +22,18 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 				<li class="header">Profiles</li>
 				<li class="treeview active">
 					<a href="<?= base_url( 'dashboard/profiles' ); ?>">
-						<i class="fa fa-table"></i> <span>Profile List</span>
-						<span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+						<i class="fa fa-users"></i> <span>Profile List</span>
+					</a>
+				</li>
+				<li class="treeview">
+					<a href="<?= base_url(); ?>" target="_blank">
+						<i class="fa fa-user-plus"></i> <span>Add Profile</span>
+					</a>
+				</li>
+				<li class="header">Other</li>
+				<li class="treeview">
+					<a href="<?= base_url( 'dashboard/contact' ); ?>" target="">
+						<i class="fa fa-envelope"></i> <span>Conact Us</span>
 					</a>
 				</li>
 			</ul>
@@ -83,6 +91,21 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
                                             </select>
                                         </div>
                                     </div>
+	                                <?php $class_non_admin = 'col-xs-3'; ?>
+	                                <?php if ( is_admin() ) : ?>
+		                                <?php $class_non_admin = 'col-xs-2'; ?>
+		                                <div class="col-xs-2">
+			                                <div class="form-group has-feedback">
+				                                <label>Status</label>
+				                                <?php $status = isset( $_GET['status'] ) && $_GET['status'] !== '' ? (int) $_GET['status'] : ''; ?>
+				                                <select class="form-control profile-filter select2" id="status" name="status">
+					                                <option value="">Select status</option>
+					                                <option value="0" <?php echo $status === 0 ? 'selected="selected"' : ''; ?>>Pending</option>
+					                                <option value="1" <?php echo $status === 1 ? 'selected="selected"' : ''; ?>>Approved</option>
+				                                </select>
+			                                </div>
+		                                </div>
+	                                <?php endif; ?>
 	                                <div class="col-xs-3">
 		                                <div class="form-group has-feedback">
 			                                <label>Gender</label>
@@ -93,7 +116,7 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 			                                </select>
 		                                </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="<?= $class_non_admin; ?>">
 		                                <div class="form-group has-feedback">
 			                                <label>Age from</label>
 			                                <select class="form-control profile-filter select2" id="age_from" name="age_from">
@@ -104,7 +127,7 @@ defined( 'BASEPATH' ) or exit( 'God bless you!' ); ?>
 			                                </select>
 		                                </div>
 	                                </div>
-	                                <div class="col-xs-3">
+	                                <div class="<?= $class_non_admin; ?>">
 		                                <div class="form-group has-feedback">
 			                                <label>Age to</label>
 			                                <select class="form-control profile-filter select2" id="age_to" name="age_to">

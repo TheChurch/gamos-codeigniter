@@ -63,7 +63,6 @@ class Registration extends CI_Controller {
 	 */
 	public function register() {
 
-		//echo '<pre>'; print_r($_POST); exit;
 		// Validate form.
 		if ( $this->validate() ) {
 
@@ -118,10 +117,15 @@ class Registration extends CI_Controller {
 			'status' => is_admin() ? 1 : 0,
 		);
 
-		// Insert attendee personal data and get attendee id.
-		$attendee_id = $this->registration_model->register( $data );
+		// Insert personal data and get profile id.
+		$profile_id = $this->registration_model->register( $data );
 
-		return ( ! empty( $attendee_id ) );
+		// Send email notification.
+		if ( ! empty( $profile_id ) ) {
+			$this->send_mail();
+		}
+
+		return ( ! empty( $profile_id ) );
 	}
 
 	/**
@@ -144,8 +148,8 @@ class Registration extends CI_Controller {
 		$this->form_validation->set_rules( 'church', 'church', 'trim|required|integer' );
 		$this->form_validation->set_rules( 'gender', 'gender', 'trim|required|max_length[1]' );
 		$this->form_validation->set_rules( 'dob', 'dob', 'trim|required' );
-		$this->form_validation->set_rules( 'height', 'height', 'trim|required|integer' );
-		$this->form_validation->set_rules( 'weight', 'weight', 'trim|required|integer' );
+		$this->form_validation->set_rules( 'height', 'height', 'trim|integer' );
+		$this->form_validation->set_rules( 'weight', 'weight', 'trim|integer' );
 		$this->form_validation->set_rules( 'state', 'state', 'trim|required|integer' );
 		$this->form_validation->set_rules( 'district', 'district', 'trim|required' );
 		$this->form_validation->set_rules( 'education', 'education', 'trim|required' );
@@ -153,9 +157,9 @@ class Registration extends CI_Controller {
 		$this->form_validation->set_rules( 'job', 'job', 'trim|required' );
 		$this->form_validation->set_rules( 'job_details', 'job_details', 'trim' );
 		$this->form_validation->set_rules( 'father_name', 'father_name', 'trim|required' );
-		$this->form_validation->set_rules( 'father_occupation', 'father_occupation', 'trim|required' );
+		$this->form_validation->set_rules( 'father_occupation', 'father_occupation', 'trim' );
 		$this->form_validation->set_rules( 'father_number', 'father_number', 'trim|required|integer' );
-		$this->form_validation->set_rules( 'mother_name', 'mother_name', 'trim|required' );
+		$this->form_validation->set_rules( 'mother_name', 'mother_name', 'trim' );
 		$this->form_validation->set_rules( 'elder_name', 'elder_name', 'trim|required' );
 		$this->form_validation->set_rules( 'elder_number', 'elder_number', 'trim|required|integer' );
 		$this->form_validation->set_rules( 'upload_key', 'upload_key', 'trim|required|integer' );
@@ -213,5 +217,35 @@ class Registration extends CI_Controller {
 
 		// If file uploaded, set upload key.
 		$this->upload->do_upload( 'file' );
+	}
+
+	/**
+	 * Send email notification that new profile added.
+	 *
+	 * @param array $data Profile data.
+	 * @param int $id Profile ID.
+	 *
+	 * @return bool
+	 */
+	public function send_mail() {
+
+		$this->load->library( 'email' );
+		// Set email config.
+		$config['mailtype'] = 'html';
+		$this->email->initialize( $config );
+
+		$this->email->from( 'contact@gamos.in', 'Gamos Search' );
+		//$this->email->to( 'mr.joelcj@gmail.com' );
+		$this->email->to( 'bijubv@gmail.com' );
+		$this->email->subject( 'New profile added' );
+
+		// Setup email content.
+		$content = 'Hey there,<br/><br/>';
+		$content .= 'One new profile has been added to Gamos Search. Please <a href="' . base_url( 'dashboard/profiles?status=pending' ) . '">click here</a> to review the pending profiles.<br/><br/>';
+		$content .= 'Thank you.';
+		$this->email->message( $content );
+
+		// Send email.
+		$this->email->send();
 	}
 }
