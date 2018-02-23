@@ -96,8 +96,10 @@ class Profiles_model extends CI_Model {
 			$this->datatables->where( 'pf.job', $post['job'] );
 		}
 
-		// Status filter.
-		if ( isset( $post['status'] ) && in_array( $post['status'], array( '0', '1' ) ) && is_admin() ) {
+		// For non-admins do not show pending profiles.
+		if ( ! is_admin() ) {
+			$this->datatables->where( 'pf.status', 1 );
+		} elseif ( isset( $post['status'] ) && in_array( $post['status'], array( '0', '1' ) ) && is_admin() ) {
 			$this->datatables->where( 'pf.status', $post['status'] );
 		}
 
