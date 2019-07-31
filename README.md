@@ -1,4 +1,4 @@
-# Camp Registration System
-Registration and data collection system for the general camp organised by local churches.
+# Gamos Matrimonial Site
+Matrimonial site using Codeigniter PHP framework.
 
 Developed and Maintained by **[Joel James](https://duckdev.com)**
